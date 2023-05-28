@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ru.practicum.EndpointHit;
 import ru.practicum.EndpointHitDto;
 import ru.practicum.ViewStats;
 import ru.practicum.mapper.EndpointHitMapper;
