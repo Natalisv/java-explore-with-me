@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.EndpointHit;
+import ru.practicum.EndpointHitDto;
 import ru.practicum.ViewStats;
 import ru.practicum.service.StatService;
 
@@ -23,7 +23,7 @@ public class StatController {
 
     @PostMapping("/hit")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void addHit(@RequestBody EndpointHit endpointHit) {
+    public void addHit(@RequestBody EndpointHitDto endpointHit) {
         statService.addHit(endpointHit);
     }
 

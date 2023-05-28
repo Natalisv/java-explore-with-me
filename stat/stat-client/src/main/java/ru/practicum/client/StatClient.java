@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
-import ru.practicum.EndpointHit;
+import ru.practicum.EndpointHitDto;
 import ru.practicum.ViewStats;
 import ru.practicum.ViewStatsRequest;
 
@@ -48,11 +48,11 @@ public class StatClient {
     }
 
     public void postHit(HttpServletRequest userRequest) {
-        EndpointHit hit = EndpointHit.builder()
+        EndpointHitDto hit = EndpointHitDto.builder()
                 .app(application)
                 .ip(userRequest.getRemoteAddr())
                 .uri(userRequest.getRequestURI())
-                .timestamp(LocalDateTime.now())
+                .timestamp("")
                 .build();
         try {
             HttpRequest.BodyPublisher bodyPublisher = HttpRequest.BodyPublishers.ofString(json.writeValueAsString(hit));

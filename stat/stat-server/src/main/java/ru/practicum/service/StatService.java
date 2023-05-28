@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ru.practicum.EndpointHit;
+import ru.practicum.EndpointHitDto;
 import ru.practicum.ViewStats;
+import ru.practicum.mapper.EndpointHitMapper;
 import ru.practicum.repository.StatRepository;
 
 import javax.validation.ValidationException;
@@ -22,9 +24,9 @@ public class StatService {
     @Autowired
     private StatRepository statRepository;
 
-    public void addHit(EndpointHit endpointHit) {
+    public void addHit(EndpointHitDto endpointHit) {
         if (isValid(endpointHit).equals(Boolean.TRUE)) {
-            statRepository.save(endpointHit);
+            statRepository.save(EndpointHitMapper.toEndpointHit(endpointHit));
             log.info("Информация сохранена");
         } else {
             log.error("Невалидная сущность");
@@ -54,9 +56,9 @@ public class StatService {
         }
     }
 
-    private Boolean isValid(EndpointHit endpointHit) {
+    private Boolean isValid(EndpointHitDto endpointHit) {
         return endpointHit.getApp() != null && !endpointHit.getApp().isEmpty() && endpointHit.getIp() != null &&
                 !endpointHit.getIp().isEmpty() && endpointHit.getUri() != null && !endpointHit.getUri().isEmpty() &&
-                endpointHit.getTimestamp() != null;
+                endpointHit.getTimestamp() != null && !endpointHit.getTimestamp().isEmpty() ;
     }
 }
