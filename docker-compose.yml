@@ -24,9 +24,9 @@ services:
       - POSTGRES_PASSWORD=root
       - TZ=GMT
 
-  ewm-service:
-    build: ewm-service
-    container_name: ewm
+  main-service:
+    build: main-service
+    container_name: main-service
     ports:
       - "8080:8080"
     depends_on:
