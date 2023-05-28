@@ -57,6 +57,6 @@ public class StatService {
     private Boolean isValid(EndpointHitDto endpointHit) {
         return endpointHit.getApp() != null && !endpointHit.getApp().isEmpty() && endpointHit.getIp() != null &&
                 !endpointHit.getIp().isEmpty() && endpointHit.getUri() != null && !endpointHit.getUri().isEmpty() &&
-                endpointHit.getTimestamp() != null && !endpointHit.getTimestamp().isEmpty() ;
+                endpointHit.getTimestamp() != null && !endpointHit.getTimestamp().isEmpty();
     }
 }
