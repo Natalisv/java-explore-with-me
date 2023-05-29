@@ -17,7 +17,7 @@ public interface StatRepository extends JpaRepository<EndpointHit, Long> {
             "select new ru.practicum.ViewStats(hit.app, hit.uri, count(hit.ip))" +
                     " from EndpointHit as hit" +
                     " where hit.timestamp between :start and :end" +
-                    " group by hit.uri" +
+                    " group by hit.uri, hit.app" +
                     " order by count(hit.uri) desc"
     )
     List<ViewStats> findAllByTime(@Param("start") LocalDateTime start,
@@ -28,7 +28,7 @@ public interface StatRepository extends JpaRepository<EndpointHit, Long> {
             "select new ru.practicum.ViewStats(hit.app, hit.uri, count(DISTINCT hit.ip))" +
                     " from EndpointHit as hit" +
                     " where hit.timestamp between :start and :end" +
-                    " group by hit.uri" +
+                    " group by hit.uri, hit.app" +
                     " order by count(hit.uri) desc"
     )
     List<ViewStats> findAllByTimeDistinctIp(@Param("start") LocalDateTime start,
@@ -40,7 +40,7 @@ public interface StatRepository extends JpaRepository<EndpointHit, Long> {
                     " from EndpointHit as hit" +
                     " where hit.timestamp between :start and :end" +
                     " and hit.uri in :uris" +
-                    " group by hit.uri" +
+                    " group by hit.uri, hit.app" +
                     " order by count(hit.uri) desc"
     )
     List<ViewStats> findByTimeAndUri(@Param("start") LocalDateTime start,
@@ -53,7 +53,7 @@ public interface StatRepository extends JpaRepository<EndpointHit, Long> {
                     " from EndpointHit as hit" +
                     " where hit.timestamp between :start and :end" +
                     " and hit.uri in :uris" +
-                    " group by hit.uri" +
+                    " group by hit.uri, hit.app" +
                     " order by count(hit.uri) desc"
     )
     List<ViewStats> findByTimeAndUriDistinctIp(@Param("start") LocalDateTime start,
