@@ -59,6 +59,8 @@ public class StatClient {
 
             HttpResponse<Void> response = httpClient.send(hitRequest, HttpResponse.BodyHandlers.discarding());
             log.info("Ответ сервиса статистики: {}", response);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         } catch (Exception e) {
             log.error("Ответ не получен");
         }
@@ -87,6 +89,8 @@ public class StatClient {
                 list = Arrays.asList(array);
             }
             return list;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         } catch (Exception e) {
             log.error("Не удалось получить статистику");
         }

@@ -1,7 +1,6 @@
 package ru.practicum.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.EndpointHitDto;
 import ru.practicum.ViewStats;
@@ -19,8 +18,11 @@ public class StatService {
 
     public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 
-    @Autowired
-    private StatRepository statRepository;
+    private final StatRepository statRepository;
+
+    public StatService(StatRepository statRepository) {
+        this.statRepository = statRepository;
+    }
 
     public void addHit(EndpointHitDto endpointHit) {
         if (isValid(endpointHit).equals(Boolean.TRUE)) {

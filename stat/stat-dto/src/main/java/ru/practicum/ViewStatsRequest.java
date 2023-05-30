@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -15,14 +16,14 @@ public class ViewStatsRequest {
 
     private String end;
 
-    private List<String> uris;
+    private List<String> uris = new ArrayList<>();
 
     private Boolean unique;
 
     public ViewStatsRequest(String start, String end, List<String> uris, Boolean unique) {
         this.start = start;
         this.end = end;
-        this.uris = uris;
+        this.uris.addAll(uris);
         this.unique = unique;
     }
 }
