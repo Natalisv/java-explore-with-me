@@ -16,5 +16,5 @@ public interface CompilationService {
 
     CompilationDto getCompilation(Long id);
 
-    List<CompilationDto> getCompilations(Boolean pinned , Integer from, Integer size);
+    List<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size);
 }

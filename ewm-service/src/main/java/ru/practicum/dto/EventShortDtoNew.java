@@ -30,7 +30,8 @@ public class EventShortDtoNew {
 
     private Integer views;
 
-    public EventShortDtoNew() {}
+    public EventShortDtoNew() {
+    }
 
     public EventShortDtoNew(Long id, String annotation, String description, Long category, CategoryDto categoryDto,
                             Integer confirmedRequests, String eventDate, User initiator, Boolean paid, String title,

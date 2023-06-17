@@ -17,6 +17,9 @@ public class CompilationDtoUpdate {
     @Length(min = 1, max = 50)
     private String title;
 
-    public CompilationDtoUpdate() {};
-    
+    public CompilationDtoUpdate() {
+    }
+
+    ;
+
 }

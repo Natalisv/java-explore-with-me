@@ -28,7 +28,8 @@ public class EventShortDto {
 
     private Integer views;
 
-    public EventShortDto() {}
+    public EventShortDto() {
+    }
 
     public EventShortDto(Long id, String annotation, String description, CategoryDto category, Integer confirmedRequests,
                          String eventDate, User initiator, Boolean paid, String title, Integer views) {

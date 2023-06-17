@@ -124,12 +124,6 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventFullDto> getEventsByAdmin(List<Long> users, List<String> states, List<Long> categories,
                                                String rangeStart, String rangeEnd, Integer from, Integer size) {
-
-        Pageable page1 = PageRequest.of(from, size);
-        Page<Event> eventPage1 = eventRepository.findAll(page1);
-        List<Event> test = new ArrayList<>();
-        test.addAll(eventPage1.getContent());
-
         List<Event> listEvent = new ArrayList<>();
         List<EventFullDto> listEventFullDto;
         if (users != null && categories != null) {
@@ -198,7 +192,7 @@ public class EventServiceImpl implements EventService {
         if (rangeStart != null && rangeEnd != null) {
             LocalDateTime rangeStartDate = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
             LocalDateTime rangeEndDate = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
-            if(rangeStartDate.isAfter(rangeEndDate)) {
+            if (rangeStartDate.isAfter(rangeEndDate)) {
                 throw new ExistException("Дата начала события должна быть позже окончания события");
             }
             listEvent = listEvent.stream()
@@ -350,8 +344,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Map<String, List<ParticipationRequestDto>>  updateStatus(RequestStatusUpdate requestStatusUpdate,
-                                                                    Long userId, Long eventId)
+    public Map<String, List<ParticipationRequestDto>> updateStatus(RequestStatusUpdate requestStatusUpdate,
+                                                                   Long userId, Long eventId)
             throws ConflictException, ExistException {
         if (userRepository.findById(userId).isPresent()) {
             Event event = eventRepository.findById(eventId).orElseThrow(() -> {

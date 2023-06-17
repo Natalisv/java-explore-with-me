@@ -20,15 +20,15 @@ public interface EventService {
 
     ParticipationRequestDto getEventRequest(Long userId, Long eventId);
 
-    List<EventFullDto> getEventsByAdmin(List<Long> users, List<String> states, List<Long> categories, String rangeStart ,
-                                        String rangeEnd , Integer from, Integer size);
+    List<EventFullDto> getEventsByAdmin(List<Long> users, List<String> states, List<Long> categories, String rangeStart,
+                                        String rangeEnd, Integer from, Integer size);
 
     EventFullDto updateEventByAdmin(Long eventId, EventUpdateDto eventFullDto) throws ExistException;
 
     EventFullDto getEvent(Long eventId);
 
-    List<EventShortDto> getEventsPublic(String text, Boolean paid, Boolean onlyAvailable,  List<Long> categories,
-                                       String rangeStart, String rangeEnd, String sort, Integer from, Integer size)
+    List<EventShortDto> getEventsPublic(String text, Boolean paid, Boolean onlyAvailable, List<Long> categories,
+                                        String rangeStart, String rangeEnd, String sort, Integer from, Integer size)
             throws ExistException;
 
     ParticipationRequestDto addRequestToEvent(Long userId, Long eventId) throws ConflictException, ExistException;

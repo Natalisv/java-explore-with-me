@@ -70,8 +70,8 @@ public class Event {
     private Long compilation;
 
 
-
-    public Event() {}
+    public Event() {
+    }
 
     public Event(Long id, String annotation, Long category, Integer confirmedRequests, LocalDateTime createdOn,
                  String description, LocalDateTime eventDate, Long initiator, Long location, Boolean paid,

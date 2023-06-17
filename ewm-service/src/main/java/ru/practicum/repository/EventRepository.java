@@ -17,7 +17,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "select event from Event as event where event.initiator in :users and event.category in :categories"
     )
     List<Event> findByUsersAndCategories(@Param("users") Long[] users,
-                                     @Param("categories") Long[] categories);
+                                         @Param("categories") Long[] categories);
 
     @Query(
             "select event from Event as event where event.initiator in :users"

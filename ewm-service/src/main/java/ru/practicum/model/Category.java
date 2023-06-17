@@ -28,7 +28,8 @@ public class Category {
     @JsonManagedReference
     private List<Long> eventId;
 
-    public Category() {}
+    public Category() {
+    }
 
     public Category(String name) {
         this.name = name;

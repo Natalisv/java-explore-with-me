@@ -30,8 +30,8 @@ public class CompilationMapper {
 
     public CompilationDto toCompilationDto(Compilation compilation, CompilationDtoNew compilationDto) {
         List<Event> list = new ArrayList<>();
-        if(compilationDto.getEvents() != null) {
-            list =  eventRepository.findByIds(compilationDto.getEvents().toArray(new Long[0]));
+        if (compilationDto.getEvents() != null) {
+            list = eventRepository.findByIds(compilationDto.getEvents().toArray(new Long[0]));
         }
         return CompilationDto.builder()
                 .id(compilation.getId())
@@ -43,8 +43,8 @@ public class CompilationMapper {
 
     public CompilationDto toCompilationDto(Compilation compilation, CompilationDtoUpdate compilationDto) {
         List<Event> list = new ArrayList<>();
-        if(compilationDto.getEvents() != null) {
-            list =  eventRepository.findByIds(compilationDto.getEvents().toArray(new Long[0]));
+        if (compilationDto.getEvents() != null) {
+            list = eventRepository.findByIds(compilationDto.getEvents().toArray(new Long[0]));
         }
         return CompilationDto.builder()
                 .id(compilation.getId())
@@ -60,7 +60,7 @@ public class CompilationMapper {
                 .id(compilation.getId())
                 .pinned(compilation.getPinned())
                 .title(compilation.getTitle())
-                .events(list.isEmpty() ?  Collections.emptyList() : list)
+                .events(list.isEmpty() ? Collections.emptyList() : list)
                 .build();
     }
 

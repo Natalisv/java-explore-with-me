@@ -23,7 +23,7 @@ public class PrivateController {
         this.eventService = eventService;
     }
 
-    @PostMapping ("/{userId}/events")
+    @PostMapping("/{userId}/events")
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto addEvent(@PathVariable Long userId, @Valid @RequestBody EventFullDtoNew eventFullDtoNew)
             throws ConflictException, ExistException {
@@ -47,7 +47,7 @@ public class PrivateController {
 
     @PatchMapping("/{userId}/events/{eventId}")
     public EventFullDto updateUserEvent(@PathVariable Long userId, @PathVariable Long eventId,
-                                           @Valid @RequestBody EventUpdateDto eventFullDto) throws ConflictException,
+                                        @Valid @RequestBody EventUpdateDto eventFullDto) throws ConflictException,
             ExistException {
         return eventService.updateEvent(userId, eventId, eventFullDto);
     }

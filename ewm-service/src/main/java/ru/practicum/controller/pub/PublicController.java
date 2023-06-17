@@ -77,7 +77,7 @@ public class PublicController {
     /*Подборки*/
 
     @GetMapping("/compilations")
-    public List<CompilationDto> getCompilations(@RequestParam(required = false) Boolean pinned ,
+    public List<CompilationDto> getCompilations(@RequestParam(required = false) Boolean pinned,
                                                 @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
                                                 @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
         return compilationService.getCompilations(pinned, from, size);

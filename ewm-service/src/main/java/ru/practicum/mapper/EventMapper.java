@@ -49,7 +49,7 @@ public class EventMapper {
                 .eventDate(LocalDateTime.parse(eventFullDtoNew.getEventDate(),
                         DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS)))
                 .paid(eventFullDtoNew.getPaid())
-                .participantLimit(eventFullDtoNew.getParticipantLimit() != null ? eventFullDtoNew.getParticipantLimit()  : 0)
+                .participantLimit(eventFullDtoNew.getParticipantLimit() != null ? eventFullDtoNew.getParticipantLimit() : 0)
                 .requestModeration(eventFullDtoNew.getRequestModeration())
                 .title(eventFullDtoNew.getTitle())
                 .build();
@@ -60,7 +60,7 @@ public class EventMapper {
                 new ViewStatsRequest("2000-01-01 00:00:00", "2100-01-01 00:00:00", Collections.emptyList(),
                         true));
         Integer views = null;
-        if(list != null) {
+        if (list != null) {
             views = list.size();
         }
         return EventFullDto.builder()
