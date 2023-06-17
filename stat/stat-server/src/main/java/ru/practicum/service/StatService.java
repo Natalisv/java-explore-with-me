@@ -25,6 +25,9 @@ public class StatService {
     }
 
     public void addHit(EndpointHitDto endpointHit) {
+        if (statRepository.findByIp(endpointHit.getIp()) != null) {
+            throw new ValidationException("Просмотр по такому ip адресу уже существует");
+        }
         if (isValid(endpointHit).equals(Boolean.TRUE)) {
             statRepository.save(EndpointHitMapper.toEndpointHit(endpointHit));
             log.info("Информация сохранена");
@@ -58,7 +61,6 @@ public class StatService {
 
     private Boolean isValid(EndpointHitDto endpointHit) {
         return endpointHit.getApp() != null && !endpointHit.getApp().isEmpty() && endpointHit.getIp() != null &&
-                !endpointHit.getIp().isEmpty() && endpointHit.getUri() != null && !endpointHit.getUri().isEmpty() &&
-                endpointHit.getTimestamp() != null && !endpointHit.getTimestamp().isEmpty();
+                !endpointHit.getIp().isEmpty() && endpointHit.getUri() != null && !endpointHit.getUri().isEmpty();
     }
 }

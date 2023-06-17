@@ -28,11 +28,12 @@ services:
 
   ewm-service:
     build: ewm-service
-    container_name: ewm-service
+    container_name: ewm
+    image: ewm
     ports:
       - "8080:8080"
-    #depends_on:
-      #- ewm-db
+    depends_on:
+      - ewm-db
     restart: always
     environment:
       - STAT_SERVER_URL=http://stats:9090
