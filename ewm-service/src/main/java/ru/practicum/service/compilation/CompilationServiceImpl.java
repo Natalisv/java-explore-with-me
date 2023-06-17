@@ -102,9 +102,9 @@ public class CompilationServiceImpl implements CompilationService {
             list = new ArrayList<>(compilationPage.getContent());
         }
         if (list != null && !list.isEmpty()) {
-            List<CompilationDto> compilationDtoList = list.stream().map(compilationMapper::toCompilationDto).collect(Collectors.toList());
-            return compilationDtoList.stream().skip(from).limit(size).
-                    collect(Collectors.toList());
+            List<CompilationDto> compilationDtoList = list.stream().map(compilationMapper::toCompilationDto)
+                    .collect(Collectors.toList());
+            return compilationDtoList.stream().skip(from).limit(size).collect(Collectors.toList());
         } else {
             return Collections.emptyList();
         }

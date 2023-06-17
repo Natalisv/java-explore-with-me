@@ -21,10 +21,8 @@ import java.util.List;
 @Service
 public class EventMapper {
 
-    private final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
-
-
     private final CategoryRepository categoryRepository;
+
 
     private final UserRepository userRepository;
 
@@ -47,7 +45,7 @@ public class EventMapper {
                 .description(eventFullDtoNew.getDescription())
                 .createdOn(LocalDateTime.now())
                 .eventDate(LocalDateTime.parse(eventFullDtoNew.getEventDate(),
-                        DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS)))
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .paid(eventFullDtoNew.getPaid())
                 .participantLimit(eventFullDtoNew.getParticipantLimit() != null ? eventFullDtoNew.getParticipantLimit() : 0)
                 .requestModeration(eventFullDtoNew.getRequestModeration())
@@ -70,7 +68,7 @@ public class EventMapper {
                 .confirmedRequests(event.getConfirmedRequests())
                 .description(event.getDescription())
                 .createdOn(String.valueOf(event.getCreatedOn()))
-                .eventDate(event.getEventDate().format(DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS)))
+                .eventDate(event.getEventDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .initiator(userRepository.findById(event.getInitiator()).get())
                 .location(locationRepository.findById(event.getLocation()).get())
                 .paid(event.getPaid() != null ? event.getPaid() : false)
@@ -89,7 +87,7 @@ public class EventMapper {
                 .annotation(event.getAnnotation())
                 .categoryDto(CategoryMapper.toCategoryDto(categoryRepository.findById(event.getCategory()).get()))
                 .confirmedRequests(event.getConfirmedRequests())
-                .eventDate(event.getEventDate().format(DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS)))
+                .eventDate(event.getEventDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .initiator(userRepository.findById(event.getInitiator()).get())
                 .paid(event.getPaid())
                 .title(event.getTitle())
@@ -103,7 +101,7 @@ public class EventMapper {
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toCategoryDto(categoryRepository.findById(event.getCategory()).get()))
                 .confirmedRequests(event.getConfirmedRequests())
-                .eventDate(event.getEventDate().format(DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS)))
+                .eventDate(event.getEventDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .initiator(userRepository.findById(event.getInitiator()).get())
                 .paid(event.getPaid())
                 .title(event.getTitle())

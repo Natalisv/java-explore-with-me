@@ -154,13 +154,13 @@ public class EventServiceImpl implements EventService {
                     .collect(Collectors.toList());
         }
         if (states != null) {
-            listEvent = listEvent.stream().filter(e -> states.contains(e.getState().toString())).
-                    collect(Collectors.toList());
+            listEvent = listEvent.stream().filter(e -> states.contains(e.getState().toString()))
+                    .collect(Collectors.toList());
         }
         listEventFullDto = listEvent.stream().map(eventMapper::toEventFullDto).collect(Collectors.toList());
 
-        return listEventFullDto != null ? listEventFullDto.stream().skip(from).limit(size).
-                collect(Collectors.toList()) : Collections.emptyList();
+        return listEventFullDto != null ? listEventFullDto.stream().skip(from).limit(size)
+                .collect(Collectors.toList()) : Collections.emptyList();
     }
 
     @Override
@@ -219,9 +219,6 @@ public class EventServiceImpl implements EventService {
             listEvent = listEvent.stream().filter(e -> e.getPaid().equals(paid))
                     .collect(Collectors.toList());
         }
-        if (onlyAvailable.equals(Boolean.TRUE)) {
-
-        }
         if (sort != null && !sort.isEmpty()) {
             if (sort.equals("EVENT_DATE")) {
                 listEvent = listEvent.stream()
@@ -234,8 +231,8 @@ public class EventServiceImpl implements EventService {
 
         eventShortDto = listEvent.stream().map(eventMapper::toEventShortDto).collect(Collectors.toList());
 
-        return eventShortDto != null ? eventShortDto.stream().skip(from).limit(size).
-                collect(Collectors.toList()) : Collections.emptyList();
+        return eventShortDto != null ? eventShortDto.stream().skip(from).limit(size)
+                .collect(Collectors.toList()) : Collections.emptyList();
     }
 
     @Override
