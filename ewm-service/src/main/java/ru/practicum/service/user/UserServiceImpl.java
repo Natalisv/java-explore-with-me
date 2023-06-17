@@ -46,10 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         if (id != null) {
-            try {
-                userRepository.deleteById(id);
-            } catch (EmptyResultDataAccessException e) {
-            }
+            userRepository.deleteById(id);
         }
     }
 
