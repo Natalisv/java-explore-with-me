@@ -71,6 +71,7 @@ public class CompilationServiceImpl implements CompilationService {
             compilationDtoNew.getEvents().forEach(c -> {
                 Event event = eventRepository.findById(c).get();
                 event.setCompilation(id);
+                eventRepository.save(event);
             });
         }
 
