@@ -65,7 +65,7 @@ public class EventMapper {
                 .id(event.getId())
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toCategoryDto(categoryRepository.findById(event.getCategory()).get()))
-                .confirmedRequests(event.getConfirmedRequests())
+                .confirmedRequests(event.getConfirmedRequests() != null ? event.getConfirmedRequests() : 0)
                 .description(event.getDescription())
                 .createdOn(String.valueOf(event.getCreatedOn()))
                 .eventDate(event.getEventDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
