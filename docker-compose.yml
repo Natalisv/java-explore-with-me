@@ -8,7 +8,6 @@ services:
       - "9090:9090"
     depends_on:
       - stats-db
-    restart: always
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
       - SPRING_DATASOURCE_USERNAME=root
@@ -34,7 +33,6 @@ services:
       - "8080:8080"
     depends_on:
       - ewm-db
-    restart: always
     environment:
       - STAT_SERVER_URL=http://stats:9090
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-db
