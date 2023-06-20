@@ -16,6 +16,7 @@ import ru.practicum.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -46,7 +47,7 @@ public class EventMapper {
                 .createdOn(LocalDateTime.now())
                 .eventDate(LocalDateTime.parse(eventFullDtoNew.getEventDate(),
                         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .paid(eventFullDtoNew.getPaid())
+                .paid(eventFullDtoNew.getPaid() != null ? eventFullDtoNew.getPaid() : false)
                 .participantLimit(eventFullDtoNew.getParticipantLimit() != null ? eventFullDtoNew.getParticipantLimit() : 0)
                 .requestModeration(eventFullDtoNew.getRequestModeration())
                 .title(eventFullDtoNew.getTitle())

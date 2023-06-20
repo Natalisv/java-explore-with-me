@@ -7,6 +7,7 @@ import ru.practicum.dto.CategoryDto;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.model.Category;
 import ru.practicum.repository.CategoryRepository;
+import ru.practicum.repository.EventRepository;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Collections;
@@ -18,9 +19,11 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final EventRepository eventRepository;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, EventRepository eventRepository) {
         this.categoryRepository = categoryRepository;
+        this.eventRepository = eventRepository;
     }
 
     @Override
@@ -36,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
             Category category = categoryRepository.findById(id).orElseThrow(() -> {
                 throw new IllegalArgumentException();
             });
-            if (category.getEventId().isEmpty()) {
+            if (eventRepository.findByCategory(category.getId()).isEmpty()) {
                 log.debug("Delete category: {}", category);
                 categoryRepository.deleteById(id);
             } else {

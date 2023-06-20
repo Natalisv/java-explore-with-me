@@ -1,5 +1,6 @@
 package ru.practicum.service.event;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
@@ -9,9 +10,7 @@ import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.ExistException;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.mapper.RequestMapper;
-import ru.practicum.model.Event;
-import ru.practicum.model.Location;
-import ru.practicum.model.Request;
+import ru.practicum.model.*;
 import ru.practicum.repository.*;
 
 import org.springframework.data.domain.Page;
@@ -24,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
@@ -40,17 +40,6 @@ public class EventServiceImpl implements EventService {
 
     public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 
-    public EventServiceImpl(EventRepository eventRepository, UserRepository userRepository,
-                            LocationRepository locationRepository, CategoryRepository categoryRepository,
-                            RequestRepository requestRepository, EventMapper eventMapper) {
-        this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
-        this.locationRepository = locationRepository;
-        this.categoryRepository = categoryRepository;
-        this.requestRepository = requestRepository;
-        this.eventMapper = eventMapper;
-    }
-
     @Override
     public EventFullDto addEvent(Long userId, EventFullDtoNew eventFullDtoNew) throws ExistException {
         if (userRepository.findById(userId).isPresent() && categoryRepository.findById(eventFullDtoNew.getCategory()).isPresent()) {
@@ -58,7 +47,7 @@ public class EventServiceImpl implements EventService {
                 Event event = eventMapper.toEvent(eventFullDtoNew);
                 Location location = locationRepository.save(eventFullDtoNew.getLocation());
                 event.setInitiator(userId);
-                event.setState(State.PENDING);
+                event.setState(State.PENDING.toString());
                 event.setLocation(location.getId());
                 Event savedEvent = eventRepository.save(event);
                 return eventMapper.toEventFullDto(savedEvent);
@@ -102,11 +91,12 @@ public class EventServiceImpl implements EventService {
             Event event = eventRepository.findById(eventId).orElseThrow(() -> {
                 throw new IllegalArgumentException();
             });
-            if (event.getState().equals(State.CANCELED) || event.getState().equals(State.PENDING)) {
+            if (event.getState().equals(State.CANCELED.toString()) || event.getState().equals(State.PENDING.toString())) {
                 Event updatedEvent = this.updateEvent(event, eventFullDto);
                 if (eventFullDto.getStateAction() != null && eventFullDto.getStateAction().equals("CANCEL_REVIEW")) {
-                    updatedEvent.setState(State.CANCELED);
+                    updatedEvent.setState(State.CANCELED.toString());
                 }
+                EventFullDto e = eventMapper.toEventFullDto(eventRepository.save(updatedEvent));
                 return eventMapper.toEventFullDto(eventRepository.save(updatedEvent));
             } else {
                 throw new ConflictException("Событие не удовлетворяет правилам редактирования");
@@ -168,7 +158,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> {
             throw new IllegalArgumentException();
         });
-        if (event.getState().equals(State.PUBLISHED)) {
+        if (event.getState().equals(State.PUBLISHED.toString())) {
             return eventMapper.toEventFullDto(event);
         } else {
             throw new IllegalArgumentException();
@@ -187,7 +177,7 @@ public class EventServiceImpl implements EventService {
             listEvent = eventRepository.findAll();
         }
 
-        listEvent = listEvent.stream().filter(e -> e.getState().equals(State.PUBLISHED)).collect(Collectors.toList());
+        listEvent = listEvent.stream().filter(e -> e.getState().equals(State.PUBLISHED.toString())).collect(Collectors.toList());
 
         if (rangeStart != null && rangeEnd != null) {
             LocalDateTime rangeStartDate = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
@@ -243,10 +233,10 @@ public class EventServiceImpl implements EventService {
         Event updatedEvent = this.updateEvent(event, eventFullDto);
         if (eventFullDto.getStateAction() != null) {
             if (eventFullDto.getStateAction().equals("PUBLISH_EVENT") &&
-                    event.getState().equals(State.PENDING)) {
-                updatedEvent.setState(State.PUBLISHED);
-            } else if (event.getState().equals(State.PENDING) && eventFullDto.getStateAction().equals("CANCEL_EVENT")) {
-                updatedEvent.setState(State.CANCELED);
+                    event.getState().equals(State.PENDING.toString())) {
+                updatedEvent.setState(State.PUBLISHED.toString());
+            } else if (event.getState().equals(State.PENDING.toString()) && eventFullDto.getStateAction().equals("CANCEL_EVENT")) {
+                updatedEvent.setState(State.CANCELED.toString());
             } else {
                 throw new DataIntegrityViolationException("Событие не удовлетворяет правилам редактирования");
             }
@@ -258,7 +248,7 @@ public class EventServiceImpl implements EventService {
     public ParticipationRequestDto addRequestToEvent(Long userId, Long eventId) throws ConflictException, ExistException {
         if (userRepository.findById(userId).isPresent()) {
             Event event = eventRepository.findById(eventId).get();
-            if (!Objects.equals(event.getInitiator(), userId) && event.getState().equals(State.PUBLISHED) &&
+            if (!Objects.equals(event.getInitiator(), userId) && event.getState().equals(State.PUBLISHED.toString()) &&
                     requestRepository.findByEventAndRequester(eventId, userId) == null) {
                 if (event.getConfirmedRequests() != null && event.getConfirmedRequests() >= event.getParticipantLimit()) {
                     throw new ConflictException("Достигнут лимит запросов на участие");

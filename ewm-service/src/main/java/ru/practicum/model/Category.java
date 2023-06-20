@@ -1,11 +1,9 @@
 package ru.practicum.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -20,14 +18,6 @@ public class Category {
     @Column(name = "name", unique = true)
     private String name;
 
-    @OneToMany(
-            targetEntity = Event.class,
-            mappedBy = "category",
-            fetch = FetchType.EAGER
-    )
-    @JsonManagedReference
-    private List<Long> eventId;
-
     public Category() {
     }
 
@@ -40,9 +30,4 @@ public class Category {
         this.name = name;
     }
 
-    public Category(Long id, String name, List<Long> eventId) {
-        this.id = id;
-        this.name = name;
-        this.eventId = eventId;
-    }
 }

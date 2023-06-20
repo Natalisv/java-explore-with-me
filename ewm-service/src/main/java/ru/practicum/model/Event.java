@@ -57,10 +57,10 @@ public class Event {
     private Boolean requestModeration;
 
     @Column(name = "state")
-    @Enumerated
-    private State state;
+    private String state;
 
     @Column(name = "title")
+    @Length(max = 120)
     private String title;
 
     @Column(name = "views")
@@ -75,7 +75,7 @@ public class Event {
 
     public Event(Long id, String annotation, Long category, Integer confirmedRequests, LocalDateTime createdOn,
                  String description, LocalDateTime eventDate, Long initiator, Long location, Boolean paid,
-                 Integer participantLimit, LocalDateTime publishedOn, Boolean requestModeration, State state,
+                 Integer participantLimit, LocalDateTime publishedOn, Boolean requestModeration, String state,
                  String title, Integer views, Long compilation) {
         this.id = id;
         this.annotation = annotation;

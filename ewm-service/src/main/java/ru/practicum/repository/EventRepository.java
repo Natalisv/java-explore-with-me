@@ -36,4 +36,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByCompilation(Long id);
 
+    List<Event> findByCategory(Long id);
+
 }
