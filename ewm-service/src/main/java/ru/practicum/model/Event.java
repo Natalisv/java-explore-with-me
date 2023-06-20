@@ -3,7 +3,6 @@ package ru.practicum.model;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import ru.practicum.dto.State;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
