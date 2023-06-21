@@ -25,9 +25,6 @@ public class StatService {
     }
 
     public void addHit(EndpointHitDto endpointHit) {
-        if (statRepository.findByIp(endpointHit.getIp()) != null) {
-            throw new ValidationException("Просмотр по такому ip адресу уже существует");
-        }
         if (isValid(endpointHit).equals(Boolean.TRUE)) {
             statRepository.save(EndpointHitMapper.toEndpointHit(endpointHit));
             log.info("Информация сохранена");
