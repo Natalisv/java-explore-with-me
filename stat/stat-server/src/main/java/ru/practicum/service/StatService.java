@@ -2,6 +2,7 @@ package ru.practicum.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.EndpointHit;
 import ru.practicum.EndpointHitDto;
 import ru.practicum.ViewStats;
 import ru.practicum.mapper.EndpointHitMapper;
@@ -50,6 +51,9 @@ public class StatService {
                 log.info("Получена статистика по времени для всех uris");
                 return statRepository.findAllByTime(startDate, endDate);
             } else {
+
+                List<EndpointHit> c = statRepository.findAll();
+                List<ViewStats> cd = statRepository.findAllByTimeDistinctIp(startDate, endDate);
                 log.info("Получена статистика по времени и уникальным ip для всех uris");
                 return statRepository.findAllByTimeDistinctIp(startDate, endDate);
             }

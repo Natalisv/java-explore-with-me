@@ -15,7 +15,6 @@ import ru.practicum.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -55,11 +54,11 @@ public class EventMapper {
 
     public EventFullDto toEventFullDto(Event event) {
         List<ViewStats> list = statClient.getStats(
-                new ViewStatsRequest("2000-01-01 00:00:00", "2100-01-01 00:00:00", Collections.emptyList(),
+                new ViewStatsRequest("2000-01-01 00:00:00", "2100-01-01 00:00:00", List.of("/events/" + event.getId()),
                         true));
-        Integer views = null;
+        Long views = null;
         if (list != null) {
-            views = list.size();
+            views = list.get(0).getHits();
         }
         return EventFullDto.builder()
                 .id(event.getId())

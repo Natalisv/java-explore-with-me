@@ -29,7 +29,7 @@ public interface StatRepository extends JpaRepository<EndpointHit, Long> {
                     " from EndpointHit as hit" +
                     " where hit.timestamp between :start and :end" +
                     " group by hit.uri, hit.app" +
-                    " order by count(hit.uri) desc"
+                    " order by  count(DISTINCT hit.ip) desc"
     )
     List<ViewStats> findAllByTimeDistinctIp(@Param("start") LocalDateTime start,
                                   @Param("end") LocalDateTime end
@@ -54,12 +54,11 @@ public interface StatRepository extends JpaRepository<EndpointHit, Long> {
                     " where hit.timestamp between :start and :end" +
                     " and hit.uri in :uris" +
                     " group by hit.uri, hit.app" +
-                    " order by count(hit.uri) desc"
+                    " order by count(DISTINCT hit.ip) desc"
     )
     List<ViewStats> findByTimeAndUriDistinctIp(@Param("start") LocalDateTime start,
                                      @Param("end") LocalDateTime end,
                                      @Param("uris") String[] uris
     );
 
-    EndpointHit findByIp(String ip);
 }
