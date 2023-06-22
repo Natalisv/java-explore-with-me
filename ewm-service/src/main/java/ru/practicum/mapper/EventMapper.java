@@ -57,7 +57,7 @@ public class EventMapper {
                 new ViewStatsRequest("2000-01-01 00:00:00", "2100-01-01 00:00:00", List.of("/events/" + event.getId()),
                         true));
         Long views = null;
-        if (list != null) {
+        if (list != null && !list.isEmpty()) {
             views = list.get(0).getHits();
         }
         return EventFullDto.builder()
