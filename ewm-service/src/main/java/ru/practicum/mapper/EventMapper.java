@@ -49,6 +49,7 @@ public class EventMapper {
                 .participantLimit(eventFullDtoNew.getParticipantLimit() != null ? eventFullDtoNew.getParticipantLimit() : 0)
                 .requestModeration(eventFullDtoNew.getRequestModeration())
                 .title(eventFullDtoNew.getTitle())
+                .views(0)
                 .build();
     }
 
