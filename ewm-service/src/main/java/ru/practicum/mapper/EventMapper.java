@@ -95,6 +95,13 @@ public class EventMapper {
     }
 
     public EventShortDto toEventShortDto(Event event) {
+        List<ViewStats> list = statClient.getStats(
+                new ViewStatsRequest("2000-01-01 00:00:00", "2100-01-01 00:00:00", List.of("/events/" + event.getId()),
+                        true));
+        Long views = 0L;
+        if (list != null && !list.isEmpty()) {
+            views = list.get(0).getHits();
+        }
         return EventShortDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())
@@ -104,7 +111,7 @@ public class EventMapper {
                 .initiator(userRepository.findById(event.getInitiator()).get())
                 .paid(event.getPaid())
                 .title(event.getTitle())
-                .views(event.getViews())
+                .views(views)
                 .build();
     }
 

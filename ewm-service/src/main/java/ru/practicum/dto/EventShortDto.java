@@ -26,13 +26,13 @@ public class EventShortDto {
 
     private String title;
 
-    private Integer views;
+    private Long views;
 
     public EventShortDto() {
     }
 
     public EventShortDto(Long id, String annotation, String description, CategoryDto category, Integer confirmedRequests,
-                         String eventDate, User initiator, Boolean paid, String title, Integer views) {
+                         String eventDate, User initiator, Boolean paid, String title, Long views) {
         this.id = id;
         this.annotation = annotation;
         this.description = description;
