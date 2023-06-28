@@ -2,7 +2,6 @@ package ru.practicum.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.EndpointHit;
 import ru.practicum.EndpointHitDto;
 import ru.practicum.ViewStats;
 import ru.practicum.mapper.EndpointHitMapper;
@@ -38,6 +37,9 @@ public class StatService {
     public List<ViewStats> getStats(String start, String end, List<String> uris, Boolean unique) {
         LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
         LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
+        if (startDate.isAfter(endDate)) {
+            throw new ValidationException();
+        }
         if (uris != null && !uris.isEmpty()) {
             if (unique.equals(Boolean.FALSE)) {
                 log.info("Получена статистика по времени для определенных uris");
@@ -51,9 +53,6 @@ public class StatService {
                 log.info("Получена статистика по времени для всех uris");
                 return statRepository.findAllByTime(startDate, endDate);
             } else {
-
-                List<EndpointHit> c = statRepository.findAll();
-                List<ViewStats> cd = statRepository.findAllByTimeDistinctIp(startDate, endDate);
                 log.info("Получена статистика по времени и уникальным ip для всех uris");
                 return statRepository.findAllByTimeDistinctIp(startDate, endDate);
             }
