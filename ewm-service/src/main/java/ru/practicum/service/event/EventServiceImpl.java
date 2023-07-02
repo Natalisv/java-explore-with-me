@@ -293,46 +293,52 @@ public class EventServiceImpl implements EventService {
             });
             List<Long> requestsIds = requestStatusUpdate.getRequestIds();
             List<Request> requests = requestRepository.getByEventAndId(eventId, requestsIds.toArray(new Long[0]));
-            List<Request> confirmedRequests = new ArrayList<>();
-            List<Request> rejectedRequests = new ArrayList<>();
-            Map<String, List<ParticipationRequestDto>> result = new HashMap<>();
 
             if (event.getInitiator().equals(userId)) {
-                if (event.getRequestModeration().equals(Boolean.FALSE) || event.getParticipantLimit() == 0) {
-                    return new HashMap<>();
-                } else if (event.getParticipantLimit().equals(event.getConfirmedRequests())) {
-                    throw new ConflictException("Достигнут лимит по заявка на данное событие");
-                } else {
-                    if (requests != null && !requests.isEmpty()) {
-                        for (Request request : requests) {
-                            if (requestStatusUpdate.getStatus().equals(State.CONFIRMED.toString())) {
-                                if (request.getStatus().equals(State.PENDING.toString()) &&
-                                        event.getConfirmedRequests() < event.getParticipantLimit()) {
-                                    request.setStatus(requestStatusUpdate.getStatus());
-                                    event.setConfirmedRequests(event.getConfirmedRequests() + 1);
-                                    confirmedRequests.add(request);
-                                } else {
-                                    throw new ConflictException("Достигнут лимит по заявка на данное событие");
-                                }
-                            } else {
-                                request.setStatus(requestStatusUpdate.getStatus());
-                                rejectedRequests.add(request);
-                            }
-                        }
-                        result.put("confirmedRequests", confirmedRequests
-                                .stream().map(RequestMapper::toRequestDto).collect(Collectors.toList()));
-                        result.put("rejectedRequests", rejectedRequests
-                                .stream().map(RequestMapper::toRequestDto).collect(Collectors.toList()));
-                        return result;
-                    } else {
-                        throw new ConflictException("Достигнут лимит по заявка на данное событие");
-                    }
-                }
+                return updateStatusPriv(event, requests, requestStatusUpdate);
             } else {
                 throw new IllegalArgumentException();
             }
         } else {
             throw new ExistException("Пользователь не найден");
+        }
+    }
+
+    private Map<String, List<ParticipationRequestDto>> updateStatusPriv(Event event, List<Request> requests,
+                                                                        RequestStatusUpdate requestStatusUpdate)
+            throws ConflictException {
+        Map<String, List<ParticipationRequestDto>> result = new HashMap<>();
+        List<Request> confirmedRequests = new ArrayList<>();
+        List<Request> rejectedRequests = new ArrayList<>();
+        if (event.getRequestModeration().equals(Boolean.FALSE) || event.getParticipantLimit() == 0) {
+            return new HashMap<>();
+        } else if (event.getParticipantLimit().equals(event.getConfirmedRequests())) {
+            throw new ConflictException("Достигнут лимит по заявка на данное событие");
+        } else {
+            if (requests != null && !requests.isEmpty()) {
+                for (Request request : requests) {
+                    if (requestStatusUpdate.getStatus().equals(State.CONFIRMED.toString())) {
+                        if (request.getStatus().equals(State.PENDING.toString()) &&
+                                event.getConfirmedRequests() < event.getParticipantLimit()) {
+                            request.setStatus(requestStatusUpdate.getStatus());
+                            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
+                            confirmedRequests.add(request);
+                        } else {
+                            throw new ConflictException("Достигнут лимит по заявка на данное событие");
+                        }
+                    } else {
+                        request.setStatus(requestStatusUpdate.getStatus());
+                        rejectedRequests.add(request);
+                    }
+                }
+                result.put("confirmedRequests", confirmedRequests
+                        .stream().map(RequestMapper::toRequestDto).collect(Collectors.toList()));
+                result.put("rejectedRequests", rejectedRequests
+                        .stream().map(RequestMapper::toRequestDto).collect(Collectors.toList()));
+                return result;
+            } else {
+                throw new ConflictException("Достигнут лимит по заявка на данное событие");
+            }
         }
     }
 
