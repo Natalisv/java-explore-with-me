@@ -30,7 +30,8 @@ public class PublicController {
 
     private final CompilationService compilationService;
 
-    public PublicController(CategoryServiceImpl categoryService, EventService eventService, StatClient statClient, CompilationService compilationService) {
+    public PublicController(CategoryServiceImpl categoryService, EventService eventService, StatClient statClient,
+                            CompilationService compilationService) {
         this.categoryService = categoryService;
         this.eventService = eventService;
         this.statClient = statClient;

@@ -38,7 +38,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public CompilationDto addCompilation(CompilationDtoNew compilationDto) {
         if (compilationDto.getEvents() != null && !compilationDto.getEvents().isEmpty()) {
-            compilationDto.getEvents().forEach(c -> {
+            compilationDto.getEvents().forEach((Long c) -> {
                 Event event = eventRepository.findById(c).get();
                 event.setCompilation(c);
             });
@@ -67,7 +67,7 @@ public class CompilationServiceImpl implements CompilationService {
         });
         if (compilationDtoNew.getEvents() != null) {
             List<Event> list = eventRepository.findByCompilation(id);
-            list.forEach(e -> e.setCompilation(null));
+            list.forEach((Event e) -> e.setCompilation(null));
             compilationDtoNew.getEvents().forEach(c -> {
                 Event event = eventRepository.findById(c).get();
                 event.setCompilation(id);

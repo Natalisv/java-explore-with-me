@@ -79,7 +79,8 @@ public class PrivateController {
 
     @PatchMapping("/{userId}/events/{eventId}/requests")
     public Map<String, List<ParticipationRequestDto>> updateStatus(@RequestBody RequestStatusUpdate requestStatusUpdate,
-                                                                   @PathVariable Long userId, @PathVariable Long eventId) throws ConflictException, ExistException {
+                                                                   @PathVariable Long userId, @PathVariable Long eventId)
+            throws ConflictException, ExistException {
         return eventService.updateStatus(requestStatusUpdate, userId, eventId);
     }
 }

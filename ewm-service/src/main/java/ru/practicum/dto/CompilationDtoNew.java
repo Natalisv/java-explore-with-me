@@ -23,9 +23,4 @@ public class CompilationDtoNew {
     @Length(min = 1, max = 50)
     private String title;
 
-    public CompilationDtoNew() {
-    }
-
-    ;
-
 }

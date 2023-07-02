@@ -96,7 +96,6 @@ public class EventServiceImpl implements EventService {
                 if (eventFullDto.getStateAction() != null && eventFullDto.getStateAction().equals("CANCEL_REVIEW")) {
                     updatedEvent.setState(State.CANCELED.toString());
                 }
-                EventFullDto e = eventMapper.toEventFullDto(eventRepository.save(updatedEvent));
                 return eventMapper.toEventFullDto(eventRepository.save(updatedEvent));
             } else {
                 throw new ConflictException("Событие не удовлетворяет правилам редактирования");
@@ -144,12 +143,12 @@ public class EventServiceImpl implements EventService {
                     .collect(Collectors.toList());
         }
         if (states != null) {
-            listEvent = listEvent.stream().filter(e -> states.contains(e.getState().toString()))
+            listEvent = listEvent.stream().filter(e -> states.contains(e.getState()))
                     .collect(Collectors.toList());
         }
         listEventFullDto = listEvent.stream().map(eventMapper::toEventFullDto).collect(Collectors.toList());
 
-        return listEventFullDto != null ? listEventFullDto.stream().skip(from).limit(size)
+        return !listEventFullDto.isEmpty() ? listEventFullDto.stream().skip(from).limit(size)
                 .collect(Collectors.toList()) : Collections.emptyList();
     }
 
@@ -263,7 +262,7 @@ public class EventServiceImpl implements EventService {
                 } else {
                     request.setStatus(State.PENDING.toString());
                 }
-                event.setConfirmedRequests(event.getConfirmedRequests() != null ? event.getConfirmedRequests() + 1 : 1);
+                event.setConfirmedRequests(event.getConfirmedRequests() != null ? (event.getConfirmedRequests() + 1) : 1);
                 Request savedRequest = requestRepository.save(request);
                 return RequestMapper.toRequestDto(savedRequest);
             } else {
@@ -299,7 +298,7 @@ public class EventServiceImpl implements EventService {
                 Event event = eventRepository.findById(request.getEvent()).orElseThrow(() -> {
                     throw new IllegalArgumentException();
                 });
-                event.setConfirmedRequests(event.getConfirmedRequests() != null ? event.getConfirmedRequests() - 1 : 0);
+                event.setConfirmedRequests(event.getConfirmedRequests() != null ? (event.getConfirmedRequests() - 1) : 0);
                 return RequestMapper.toRequestDto(request);
             } else {
                 throw new IllegalArgumentException();
@@ -381,6 +380,46 @@ public class EventServiceImpl implements EventService {
         } else {
             throw new ExistException("Пользователь не найден");
         }
+    }
+
+    private List<Event> getListEvent(List<Long> users, List<Long> categories, Integer from, Integer size) {
+        List<Event> listEvent = new ArrayList<>();
+        if (users != null && categories != null) {
+            listEvent = eventRepository.findByUsersAndCategories(users.toArray(new Long[0]), categories.toArray(new Long[0]));
+        } else if (users != null) {
+            listEvent = eventRepository.findByUsers(users.toArray(new Long[0]));
+        } else if (categories != null) {
+            listEvent = eventRepository.findByCategories(categories.toArray(new Long[0]));
+        } else {
+            Pageable page = PageRequest.of(from, size);
+            Page<Event> eventPage = eventRepository.findAll(page);
+            listEvent.addAll(eventPage.getContent());
+        }
+        return listEvent;
+    }
+
+    private List<Event> filterListEvent(String rangeStart, String rangeEnd, List<Event> listEvent) throws ExistException {
+        if (rangeStart != null && rangeEnd != null) {
+            LocalDateTime rangeStartDate = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
+            LocalDateTime rangeEndDate = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
+            if (rangeStartDate.isAfter(rangeEndDate)) {
+                throw new ExistException("Дата начала события должна быть позже окончания события");
+            }
+            listEvent = listEvent.stream()
+                    .filter(e -> e.getEventDate().isAfter(rangeStartDate) && e.getEventDate().isBefore(rangeEndDate))
+                    .collect(Collectors.toList());
+        } else if (rangeStart != null) {
+            LocalDateTime rangeStartDate = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
+            listEvent = listEvent.stream().filter(e -> e.getEventDate().isAfter(rangeStartDate))
+                    .collect(Collectors.toList());
+        } else if (rangeEnd != null) {
+            LocalDateTime rangeEndDate = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
+            listEvent = listEvent.stream().filter(e -> e.getEventDate().isBefore(rangeEndDate))
+                    .collect(Collectors.toList());
+        } else {
+            return listEvent;
+        }
+        return listEvent;
     }
 
     private Boolean checkTime(EventFullDtoNew eventFullDtoNew) {
