@@ -115,33 +115,6 @@ public class EventServiceImpl implements EventService {
                                                String rangeStart, String rangeEnd, Integer from, Integer size) throws ExistException {
         List<Event> listEvent = getListEvent(users, categories, from, size);
         List<EventFullDto> listEventFullDto;
-        /*if (users != null && categories != null) {
-            listEvent = eventRepository.findByUsersAndCategories(users.toArray(new Long[0]), categories.toArray(new Long[0]));
-        } else if (users != null) {
-            listEvent = eventRepository.findByUsers(users.toArray(new Long[0]));
-        } else if (categories != null) {
-            listEvent = eventRepository.findByCategories(categories.toArray(new Long[0]));
-        } else {
-            Pageable page = PageRequest.of(from, size);
-            Page<Event> eventPage = eventRepository.findAll(page);
-            listEvent.addAll(eventPage.getContent());
-        }*/
-        /*if (rangeStart != null && rangeEnd != null) {
-            LocalDateTime rangeStartDate = LocalDateTime.parse(rangeStart,
-                    DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
-            LocalDateTime rangeEndDate = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
-            listEvent = listEvent.stream()
-                    .filter(e -> e.getEventDate().isAfter(rangeStartDate) && e.getEventDate().isBefore(rangeEndDate))
-                    .collect(Collectors.toList());
-        } else if (rangeStart != null) {
-            LocalDateTime rangeStartDate = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
-            listEvent = listEvent.stream().filter(e -> e.getEventDate().isAfter(rangeStartDate))
-                    .collect(Collectors.toList());
-        } else if (rangeEnd != null) {
-            LocalDateTime rangeEndDate = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
-            listEvent = listEvent.stream().filter(e -> e.getEventDate().isBefore(rangeEndDate))
-                    .collect(Collectors.toList());
-        }*/
         listEvent = filterListEvent(rangeStart, rangeEnd, listEvent);
         if (states != null) {
             listEvent = listEvent.stream().filter(e -> states.contains(e.getState()))
@@ -179,27 +152,7 @@ public class EventServiceImpl implements EventService {
 
         listEvent = listEvent.stream().filter(e -> e.getState().equals(State.PUBLISHED.toString())).collect(Collectors.toList());
 
-        if (rangeStart != null && rangeEnd != null) {
-            LocalDateTime rangeStartDate = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
-            LocalDateTime rangeEndDate = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
-            if (rangeStartDate.isAfter(rangeEndDate)) {
-                throw new ExistException("Дата начала события должна быть позже окончания события");
-            }
-            listEvent = listEvent.stream()
-                    .filter(e -> e.getEventDate().isAfter(rangeStartDate) && e.getEventDate().isBefore(rangeEndDate))
-                    .collect(Collectors.toList());
-        } else if (rangeStart != null) {
-            LocalDateTime rangeStartDate = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
-            listEvent = listEvent.stream().filter(e -> e.getEventDate().isAfter(rangeStartDate))
-                    .collect(Collectors.toList());
-        } else if (rangeEnd != null) {
-            LocalDateTime rangeEndDate = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
-            listEvent = listEvent.stream().filter(e -> e.getEventDate().isBefore(rangeEndDate))
-                    .collect(Collectors.toList());
-        } else {
-            listEvent = listEvent.stream().filter(e -> e.getEventDate().isAfter(LocalDateTime.now()))
-                    .collect(Collectors.toList());
-        }
+       listEvent = filterListEvent(rangeStart, rangeEnd, listEvent);
         if (text != null) {
             listEvent = listEvent.stream().filter(e -> e.getAnnotation().toLowerCase().contains(text.toLowerCase()) ||
                             e.getDescription().toLowerCase().contains(text.toLowerCase()))
@@ -418,7 +371,8 @@ public class EventServiceImpl implements EventService {
             listEvent = listEvent.stream().filter(e -> e.getEventDate().isBefore(rangeEndDate))
                     .collect(Collectors.toList());
         } else {
-            return listEvent;
+            return listEvent.stream().filter(e -> e.getEventDate().isAfter(LocalDateTime.now()))
+                    .collect(Collectors.toList());
         }
         return listEvent;
     }
