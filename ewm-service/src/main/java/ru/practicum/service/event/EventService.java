@@ -21,7 +21,7 @@ public interface EventService {
     ParticipationRequestDto getEventRequest(Long userId, Long eventId);
 
     List<EventFullDto> getEventsByAdmin(List<Long> users, List<String> states, List<Long> categories, String rangeStart,
-                                        String rangeEnd, Integer from, Integer size);
+                                        String rangeEnd, Integer from, Integer size) throws ExistException;
 
     EventFullDto updateEventByAdmin(Long eventId, EventUpdateDto eventFullDto) throws ExistException;
 
