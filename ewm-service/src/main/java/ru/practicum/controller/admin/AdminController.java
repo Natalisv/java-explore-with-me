@@ -87,7 +87,7 @@ public class AdminController {
                                                @RequestParam(defaultValue = "0") Integer confirmedRequests,
                                                @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
                                                @Positive @RequestParam(name = "size", defaultValue = "10") Integer size
-    ) {
+    ) throws ExistException {
         return eventService.getEventsByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 

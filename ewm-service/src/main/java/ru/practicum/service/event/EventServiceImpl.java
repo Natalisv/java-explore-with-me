@@ -112,10 +112,10 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventFullDto> getEventsByAdmin(List<Long> users, List<String> states, List<Long> categories,
-                                               String rangeStart, String rangeEnd, Integer from, Integer size) {
-        List<Event> listEvent = new ArrayList<>();
+                                               String rangeStart, String rangeEnd, Integer from, Integer size) throws ExistException {
+        List<Event> listEvent = getListEvent(users, categories, from, size);
         List<EventFullDto> listEventFullDto;
-        if (users != null && categories != null) {
+        /*if (users != null && categories != null) {
             listEvent = eventRepository.findByUsersAndCategories(users.toArray(new Long[0]), categories.toArray(new Long[0]));
         } else if (users != null) {
             listEvent = eventRepository.findByUsers(users.toArray(new Long[0]));
@@ -125,8 +125,8 @@ public class EventServiceImpl implements EventService {
             Pageable page = PageRequest.of(from, size);
             Page<Event> eventPage = eventRepository.findAll(page);
             listEvent.addAll(eventPage.getContent());
-        }
-        if (rangeStart != null && rangeEnd != null) {
+        }*/
+        /*if (rangeStart != null && rangeEnd != null) {
             LocalDateTime rangeStartDate = LocalDateTime.parse(rangeStart,
                     DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
             LocalDateTime rangeEndDate = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
@@ -141,7 +141,8 @@ public class EventServiceImpl implements EventService {
             LocalDateTime rangeEndDate = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
             listEvent = listEvent.stream().filter(e -> e.getEventDate().isBefore(rangeEndDate))
                     .collect(Collectors.toList());
-        }
+        }*/
+        listEvent = filterListEvent(rangeStart, rangeEnd, listEvent);
         if (states != null) {
             listEvent = listEvent.stream().filter(e -> states.contains(e.getState()))
                     .collect(Collectors.toList());
