@@ -37,6 +37,9 @@ public class StatService {
     public List<ViewStats> getStats(String start, String end, List<String> uris, Boolean unique) {
         LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
         LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS));
+        if (startDate.isAfter(endDate)) {
+            throw new ValidationException();
+        }
         if (uris != null && !uris.isEmpty()) {
             if (unique.equals(Boolean.FALSE)) {
                 log.info("Получена статистика по времени для определенных uris");
@@ -58,7 +61,6 @@ public class StatService {
 
     private Boolean isValid(EndpointHitDto endpointHit) {
         return endpointHit.getApp() != null && !endpointHit.getApp().isEmpty() && endpointHit.getIp() != null &&
-                !endpointHit.getIp().isEmpty() && endpointHit.getUri() != null && !endpointHit.getUri().isEmpty() &&
-                endpointHit.getTimestamp() != null && !endpointHit.getTimestamp().isEmpty();
+                !endpointHit.getIp().isEmpty() && endpointHit.getUri() != null && !endpointHit.getUri().isEmpty();
     }
 }

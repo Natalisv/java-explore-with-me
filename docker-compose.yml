@@ -3,49 +3,55 @@ services:
   stats-server:
     build: stat/stat-server
     container_name: stats
+    hostname: stat-server
     image: stats
     ports:
       - "9090:9090"
     depends_on:
       - stats-db
-    restart: always
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
       - TZ=GMT
 
   stats-db:
     image: postgres:14-alpine
     container_name: stats-db
+    hostname: stats-db
     ports:
       - "6541:5432"
     environment:
       - POSTGRES_DB=stats-db
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
       - TZ=GMT
 
   ewm-service:
     build: ewm-service
-    container_name: ewm-service
+    container_name: ewm
+    hostname: ewm-service
+    image: ewm
     ports:
       - "8080:8080"
-    #depends_on:
-      #- ewm-db
-    restart: always
+    depends_on:
+      - ewm-db
+      - stats-server
     environment:
-      - STAT_SERVER_URL=http://stats:9090
+      - STAT_SERVER_URL=http://stat-server:9090
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
       - TZ=GMT
 
   ewm-db:
     image: postgres:14-alpine
     container_name: ewm-db
+    hostname: ewm-db
     ports:
       - "6542:5432"
     environment:
       - POSTGRES_DB=ewm-db
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
       - TZ=GMT

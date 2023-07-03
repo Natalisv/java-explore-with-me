@@ -32,7 +32,7 @@ public class StatClient {
     private final HttpClient httpClient;
 
     public StatClient(@Value("ewm-main-service") String application,
-                      @Value("http://localhost:9090") String statsServiceUri,
+                      @Value("http://stat-server:9090") String statsServiceUri,
                       ObjectMapper json) {
         this.application = application;
         this.statsServiceUri = statsServiceUri;

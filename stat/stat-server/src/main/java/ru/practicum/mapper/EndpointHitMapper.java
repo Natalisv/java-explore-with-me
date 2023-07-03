@@ -4,7 +4,6 @@ import ru.practicum.EndpointHit;
 import ru.practicum.EndpointHitDto;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public final class EndpointHitMapper {
 
@@ -16,7 +15,7 @@ public final class EndpointHitMapper {
                 endpointHitDto.getApp(),
                 endpointHitDto.getUri(),
                 endpointHitDto.getIp(),
-                LocalDateTime.parse(endpointHitDto.getTimestamp(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                LocalDateTime.now()
         );
     }
 }
