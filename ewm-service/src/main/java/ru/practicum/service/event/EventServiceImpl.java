@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.comment.Comment;
+import ru.practicum.comment.CommentRepository;
 import ru.practicum.dto.*;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.ExistException;
@@ -35,6 +37,8 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
 
     private final RequestRepository requestRepository;
+
+    private final CommentRepository commentRepository;
 
     private final EventMapper eventMapper;
 
@@ -301,6 +305,15 @@ public class EventServiceImpl implements EventService {
             }
         } else {
             throw new ExistException("Пользователь не найден");
+        }
+    }
+
+    @Override
+    public List<Comment> getEventComments(Long userId, Long eventId) {
+        if (userRepository.findById(userId).isPresent()) {
+          return commentRepository.findByEventId(eventId);
+        } else {
+            throw new IllegalArgumentException();
         }
     }
 

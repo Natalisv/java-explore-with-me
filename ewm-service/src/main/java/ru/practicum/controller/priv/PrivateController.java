@@ -2,6 +2,7 @@ package ru.practicum.controller.priv;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.comment.Comment;
 import ru.practicum.dto.*;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.ExistException;
@@ -82,5 +83,10 @@ public class PrivateController {
                                                                    @PathVariable Long userId, @PathVariable Long eventId)
             throws ConflictException, ExistException {
         return eventService.updateStatus(requestStatusUpdate, userId, eventId);
+    }
+
+    @GetMapping("/{userId}/{eventId}/comments")
+    public List<Comment> getEventComments(@PathVariable Long userId, @PathVariable Long eventId) {
+        return eventService.getEventComments(userId, eventId);
     }
 }

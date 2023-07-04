@@ -1,5 +1,6 @@
 package ru.practicum.service.event;
 
+import ru.practicum.comment.Comment;
 import ru.practicum.dto.*;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.ExistException;
@@ -41,5 +42,7 @@ public interface EventService {
 
     Map<String, List<ParticipationRequestDto>> updateStatus(RequestStatusUpdate requestStatusUpdate, Long userId,
                                                             Long eventId) throws ConflictException, ExistException;
+
+    List<Comment> getEventComments(Long userId, Long eventId);
 
 }
