@@ -30,7 +30,8 @@ public class Comment {
     @Column(name = "event_id")
     private Long eventId;
 
-    public Comment() {}
+    public Comment() {
+    }
 
     public Comment(Long id, Long authorId, String text, LocalDateTime date, Long eventId) {
         this.id = id;
