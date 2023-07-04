@@ -259,7 +259,7 @@
               "    pm.response.to.be.json;\r",
               "});\r",
               "\r",
-              "const source = JSON.parse(pm.request.body.raw);\r",
+              "const source = pm.collectionVariables.get('response');\r",
               "const target = pm.response.json();\r",
               "\r",
               "pm.test(\"Комментарий должен содержать поля: id, authorId, text, date, eventId\", function () {\r",
@@ -301,7 +301,16 @@
               "        await api.acceptParticipationRequest(event.id, user.id, requestToParticipate.id);\r",
               "        pm.collectionVariables.set('uid', submittedUser.id);\r",
               "        pm.collectionVariables.set('eid', event.id);\r",
-              "        comment = rnd.getComment();\r",
+              "        comment1 = rnd.getComment();\r",
+              "        const comment = await api.addComment(submittedUser.id, event.id, comment1);\r",
+              "    \r",
+              "        pm.collectionVariables.set('response', comment);\r",
+              "        pm.request.body.update({\r",
+              "            mode: 'raw',\r",
+              "            raw: comment,\r",
+              "            options: { raw: { language: 'json' } }\r",
+              "        });\r",
+              "        pm.collectionVariables.set(\"cid\", comment.id)\r",
               "    } catch(err) {\r",
               "        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
               "    }\r",
@@ -353,7 +362,7 @@
           "variable": [
             {
               "key": "commentId",
-              "value": "1"
+              "value": "{{cid}}"
             }
           ]
         }
