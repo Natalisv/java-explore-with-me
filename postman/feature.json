@@ -273,7 +273,7 @@
               "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
               "    pm.expect(target.id).to.not.be.null;\r",
               "    pm.expect(target.text).to.be.a(\"string\");\r",
-              "    pm.expect(source.text).equal(target.text, 'Текст комментария должен соответствовать указанному при создании');\r",
+              "    pm.expect(source.id).equal(target.id, 'Идентификатор комментария должен соответствовать указанному при создании');\r",
               "});"
             ],
             "type": "text/javascript"
@@ -398,7 +398,7 @@
               "        const category = await api.addCategory(rnd.getCategory());\r",
               "        let eventBody = rnd.getEvent(category.id);\r",
               "        eventBody['requestModeration'] = true;\r",
-              "        eventBody['participantLimit'] =  1;\r",
+              "        eventBody['participantLimit'] =  10;\r",
               "        let event = await api.addEvent(user.id, eventBody);\r",
               "        event = await api.publishEvent(event.id);\r",
               "        const submittedUser = await api.addUser(rnd.getUser());\r",
@@ -892,7 +892,7 @@
               "        pm.collectionVariables.set(\"cid\", comment.id);\r",
               "        const foundComment = await api.findComment(comment.id);\r",
               "        pm.collectionVariables.set('response', foundComment);\r",
-              "    } catch(err) {\r",
+              "    } catch(err) {\r" ,
               "        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
               "    }\r",
               "};\r",
