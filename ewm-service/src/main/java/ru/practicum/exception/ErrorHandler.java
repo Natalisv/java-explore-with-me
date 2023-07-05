@@ -44,7 +44,7 @@ public class ErrorHandler {
     public ResponseEntity<Map<String, String>> illegalArgumentExceptionHandler(IllegalArgumentException e) {
         log.warn(ERROR, e.getMessage());
         return ResponseEntity.status(404).body(Map.of("reason", "The required object was not found.",
-                "message", "Category with id= was not found"));
+                "message", "Entity with id= was not found"));
     }
 
     @ExceptionHandler
